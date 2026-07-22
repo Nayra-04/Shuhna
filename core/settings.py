@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'drf_spectacular',
     'silk',
     'users',
+    'orders',
 ]
 
 REST_FRAMEWORK = {
@@ -158,3 +159,11 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = env("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = env("EMAIL_HOST_USER")
+
+
+DELIVERY_BASE_FEE = 12 
+DELIVERY_PRICE_PER_KM = 3
+
+
+os.environ['GDAL_LIBRARY_PATH'] = r'C:\OSGeo4W64\bin\gdal312.dll'
+os.environ['GEOS_LIBRARY_PATH'] = r'C:\OSGeo4W64\bin\geos_c.dll'

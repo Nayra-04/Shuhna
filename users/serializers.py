@@ -1,4 +1,3 @@
-from django.contrib.auth import authenticate
 from django.db import transaction
 from rest_framework import serializers
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -7,6 +6,8 @@ import re
 from .validators import validate_strong_password
 from django.core.mail import send_mail
 from django.conf import settings as django_settings
+from django.contrib.gis.geos import Point
+from django.utils import timezone
 
 
 class BaseRegisterSerializer(serializers.Serializer):
@@ -196,35 +197,22 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 class ProfileUpdateSerializer(serializers.Serializer):
     full_name = serializers.CharField(required=False, max_length=150)
-    email = serializers.EmailField(required=False)
-    phone = serializers.CharField(max_length=20, required=False)
     image = serializers.ImageField(required=False)
+
     shop_name = serializers.CharField(required=False, max_length=150)
     shop_address = serializers.CharField(required=False, allow_blank=True, max_length=255)
+    shop_lat = serializers.FloatField(required=False, write_only=True)
+    shop_lng = serializers.FloatField(required=False, write_only=True)
 
     vehicle_type = serializers.ChoiceField(
         choices=RepProfile.VehicleType.choices, required=False
     )
-
-    def validate_email(self, value):
-        user = self.instance
-        if (
-            User.objects.filter(email__iexact=value)
-            .exclude(pk=user.pk)
-            .exists()
-        ):
-            raise serializers.ValidationError(
-                "هذا البريد الإلكتروني مستخدم بالفعل."
-            )
-        return value
+    current_lat = serializers.FloatField(required=False, write_only=True)
+    current_lng = serializers.FloatField(required=False, write_only=True)
 
     def update(self, instance, validated_data):
         if "full_name" in validated_data:
             instance.full_name = validated_data["full_name"]
-        if "email" in validated_data:
-            instance.email = validated_data["email"]
-        if "phone" in validated_data:
-            instance.phone = validated_data["phone"]
         if "image" in validated_data:
             instance.image = validated_data["image"]
         instance.save()
@@ -235,12 +223,21 @@ class ProfileUpdateSerializer(serializers.Serializer):
                 profile.shop_name = validated_data["shop_name"]
             if "shop_address" in validated_data:
                 profile.shop_address = validated_data["shop_address"]
+            if "shop_lat" in validated_data and "shop_lng" in validated_data:
+                profile.shop_location = Point(
+                    validated_data["shop_lng"], validated_data["shop_lat"], srid=4326
+                )
             profile.save()
 
         elif instance.role == User.Role.REP and hasattr(instance, "rep_profile"):
             profile = instance.rep_profile
             if "vehicle_type" in validated_data:
                 profile.vehicle_type = validated_data["vehicle_type"]
+            if "current_lat" in validated_data and "current_lng" in validated_data:
+                profile.current_location = Point(
+                    validated_data["current_lng"], validated_data["current_lat"], srid=4326
+                )
+                profile.last_location_update = timezone.now()
             profile.save()
 
         return instance
