@@ -37,7 +37,9 @@ INSTALLED_APPS = [
     'users',
     'orders',
     'tracking',
+    'notifications',
 ]
+
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
@@ -181,3 +183,6 @@ DELIVERY_PRICE_PER_KM = 3
 
 os.environ['GDAL_LIBRARY_PATH'] = r'C:\OSGeo4W64\bin\gdal312.dll'
 os.environ['GEOS_LIBRARY_PATH'] = r'C:\OSGeo4W64\bin\geos_c.dll'
+
+
+FIREBASE_CREDENTIALS_PATH = BASE_DIR / "firebase_credentials.json"
