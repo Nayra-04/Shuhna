@@ -90,10 +90,11 @@ delivered
 
 ```text
 shuhna/
-├── users/         # Custom user model, authentication, merchant & rep profiles
+├── users/            # Custom user model, authentication, merchant & rep profiles
 ├── orders/           # Order lifecycle, geolocation matching, status history
 ├── tracking/         # WebSocket consumers & live location updates
-└── notifications/    # Push notifications & notification feed
+├── notifications/    # Push notifications & notification feed
+└── core/             # Project settings, ASGI/WSGI
 ```
 
 ---
