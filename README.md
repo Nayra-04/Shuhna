@@ -205,9 +205,9 @@ Swagger documentation is available at:
 
 | Method | Endpoint | Description |
 |---------|----------|-------------|
-| POST | `/api/auth/register/merchant/` | Merchant registration |
-| POST | `/api/auth/register/rep/` | Representative registration |
-| POST | `/api/auth/login/` | Login (JWT) |
+| POST | `/api/users/register/merchant/` | Merchant registration |
+| POST | `/api/users/register/rep/` | Representative registration |
+| POST | `/api/users/login/` | Login (JWT) |
 | POST | `/api/orders/create/` | Create a delivery order |
 | GET | `/api/orders/nearby/` | Nearby pending orders |
 | POST | `/api/orders/{id}/accept/` | Accept an order |
