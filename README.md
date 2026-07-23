@@ -60,7 +60,7 @@ delivered
 - Firebase Cloud Messaging (FCM)
 - Decoupled using Django Signals
 
-### 📄 API Documentation
+### API Documentation
 - Swagger UI
 - OpenAPI
 - Powered by **drf-spectacular**
